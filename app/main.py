@@ -7,6 +7,10 @@ def main():
 
         command = input()
 
+        if command.startswith("echo "):
+            print(command[5:])
+            continue
+
         if command == "exit":
             break
 
