@@ -3,6 +3,9 @@ import os
 import subprocess
 
 
+current_dir = os.getcwd()
+
+
 def find_command_path(command):
     paths = os.environ.get('PATH', '').split(os.pathsep)
 
@@ -19,21 +22,35 @@ def cmd_echo(params):
 
 
 def cmd_type(params):
-    if params[0] in ['echo', 'exit', 'type', 'pwd']:
-        print(f"{params[0]} is a shell builtin")
+    command = params[0]
+
+    if command in ['echo', 'exit', 'type', 'pwd']:
+        print(f"{command} is a shell builtin")
         return
 
-    command_path = find_command_path(params[0])
+    command_path = find_command_path(command)
 
     if command_path:
-        print(f"{params[0]} is {command_path}")
+        print(f"{command} is {command_path}")
         return
 
-    print(f"{params[0]}: not found")
+    print(f"{command}: not found")
 
 
 def cmd_pwd():
-    print(os.getcwd())
+    print(current_dir)
+
+
+def cmd_cd(params):
+    global current_dir
+
+    path = params[0]
+
+    if path.startswith("/"):
+        if os.path.isdir(path):
+            current_dir = path
+        else:
+            print(f"{path}: No such file or directory")
 
 
 def cmd_exec(params):
@@ -64,6 +81,10 @@ def main():
 
         if inputs[0] == "pwd":
             cmd_pwd()
+            continue
+
+        if inputs[0] == "cd":
+            cmd_cd(inputs[1:])
             continue
 
         cmd_exec(inputs)
