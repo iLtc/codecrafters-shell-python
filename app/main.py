@@ -47,10 +47,15 @@ def cmd_cd(params):
     path = params[0]
 
     if path.startswith("/"):
-        if os.path.isdir(path):
-            current_dir = path
-        else:
-            print(f"{path}: No such file or directory")
+        new_dir = path
+
+    else:
+        new_dir = os.path.abspath(os.path.join(current_dir, path))
+
+    if os.path.isdir(new_dir):
+        current_dir = new_dir
+    else:
+        print(f"{path}: No such file or directory")
 
 
 def cmd_exec(params):
