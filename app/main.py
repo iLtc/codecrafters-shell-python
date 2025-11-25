@@ -1,4 +1,5 @@
 import sys
+import os
 
 
 def cmd_echo(params):
@@ -8,9 +9,17 @@ def cmd_echo(params):
 def cmd_type(params):
     if params[0] in ['echo', 'exit', 'type']:
         print(f"{params[0]} is a shell builtin")
+        return
 
-    else:
-        print(f"{params[0]}: not found")
+    paths = os.environ.get('PATH', '').split(os.pathsep)
+
+    for path in paths:
+        full_path = os.path.join(path, params[0])
+        if os.path.exists(full_path) and os.access(full_path, os.X_OK):
+            print(f"{params[0]} is {full_path}")
+            return
+
+    print(f"{params[0]}: not found")
 
 
 def main():
