@@ -19,7 +19,7 @@ def cmd_echo(params):
 
 
 def cmd_type(params):
-    if params[0] in ['echo', 'exit', 'type']:
+    if params[0] in ['echo', 'exit', 'type', 'pwd']:
         print(f"{params[0]} is a shell builtin")
         return
 
@@ -30,6 +30,10 @@ def cmd_type(params):
         return
 
     print(f"{params[0]}: not found")
+
+
+def cmd_pwd():
+    print(os.getcwd())
 
 
 def cmd_exec(params):
@@ -56,6 +60,10 @@ def main():
 
         if inputs[0] == "type":
             cmd_type(inputs[1:])
+            continue
+
+        if inputs[0] == "pwd":
+            cmd_pwd()
             continue
 
         cmd_exec(inputs)
