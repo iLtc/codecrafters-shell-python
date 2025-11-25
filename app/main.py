@@ -49,6 +49,9 @@ def cmd_cd(params):
     if path.startswith("/"):
         new_dir = path
 
+    elif path.startswith("~"):
+        new_dir = os.environ.get('HOME', '')
+
     else:
         new_dir = os.path.abspath(os.path.join(current_dir, path))
 
